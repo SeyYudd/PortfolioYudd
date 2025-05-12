@@ -3,133 +3,328 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Receipt Portfolio</title>
+    <title>Receipt Portfolio - Yudd</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            background-color: #f5f5f5;
-            background-image: radial-gradient(#ddd 1px, transparent 1px);
-            background-size: 20px 20px;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-        .receipt-paper {
-            width: 100%;
-            max-width: 400px;
-            background: white;
-            padding: 25px;
-            box-shadow: 
-                0 2px 10px rgba(0,0,0,0.1),
-                0 0 0 1px #eee,
-                5px 5px 20px rgba(0,0,0,0.1);
-            transform: rotate(1deg);
-            position: relative;
-            border-top: 4px solid #000;
             font-family: 'Courier New', monospace;
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            transition: all 0.5s ease;
         }
-        .receipt-paper:before {
+        
+        /* Print Preview Style */
+        .print-preview {
+            width: 300px;
+            height: 100px;
+            background-color: white;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .print-preview:before {
+            content: "";
+            position: absolute;
+            top: 5px;
+            left: 10px;
+            right: 10px;
+            height: 2px;
+            background: repeating-linear-gradient(to right, #000, #000 2px, transparent 2px, transparent 4px);
+        }
+        
+        .print-preview:after {
+            content: "CLICK TO OPEN YUDD PORTFOLIO";
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        /* Full Receipt Style */
+        .receipt {
+            width: 100%;
+            max-width: 500px;
+            background-color: white;
+            padding: 25px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            border-top: 5px solid #000;
+            position: relative;
+            display: none;
+        }
+        
+        .receipt:before {
             content: "";
             position: absolute;
             left: 10px;
             right: 10px;
             bottom: -10px;
             height: 20px;
-            background: rgba(0,0,0,0.03);
+            background: rgba(0,0,0,0.05);
             filter: blur(5px);
             z-index: -1;
         }
-        .receipt-header {
-            text-align: center;
-            border-bottom: 2px dashed #000;
-            padding-bottom: 10px;
-            margin-bottom: 15px;
-        }
-        .receipt-item {
-            display: flex;
-            justify-content: space-between;
-            margin: 8px 0;
-        }
+        
         .divider {
-            border-top: 1px dashed #ddd;
+            border-top: 1px dashed #000;
             margin: 15px 0;
         }
-        .qr-code {
+        
+        .photo-btn {
+            background: none;
+            border: none;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            cursor: pointer;
             text-align: center;
+            display: block;
+            width: 100%;
+            padding: 5px;
+            margin: 10px 0;
+        }
+        
+        .photo-container {
+            text-align: center;
+            margin: 15px 0;
+            display: none;
+        }
+        
+        .photo-container img {
+            max-width: 150px;
+            border-radius: 50%;
+            border: 2px solid #000;
+        }
+        
+        .show-more-btn {
+            background: none;
+            border: none;
+            font-family: 'Courier New', monospace;
+            color: #666;
+            cursor: pointer;
+            padding: 0;
+            font-size: 0.9em;
+        }
+        
+        .hidden-content {
+            display: none;
+        }
+        
+        .qr-container {
+            display: flex;
+            justify-content: space-around;
             margin-top: 20px;
+        }
+        
+        .qr-box {
+            text-align: center;
+        }
+        
+        .qr-box img {
+            width: 100px;
+            height: 100px;
+        }
+        
+        .experience-item, .education-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        
+        .skills-category {
+            margin-bottom: 15px;
+        }
+        
+        .skills-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+        .skills-content {
+            padding-left: 20px;
+            margin-top: 5px;
         }
     </style>
 </head>
 <body>
-    <div class="receipt-paper">
-        <div class="receipt-header">
-            <h4 class="mb-1">RECEIPT PORTFOLIO</h4>
-            <p class="mb-0">#QA2025-001</p>
-        </div>
-
+    <div class="print-preview" id="printPreview" onclick="showReceipt()"></div>
+    
+    <div class="receipt" id="receiptPortfolio">
         <div class="text-center mb-3">
-            <h6>ABOUT ME</h6>
+            <button class="photo-btn" onclick="togglePhoto()">▼▼▼ Receipt Portfolio ▼▼▼</button>
+            <div class="photo-container" id="photoContainer">
+                <p>#QA2025-001</p>
+            </div>
+        </div>
+        
+        <div class="divider"></div>
+        
+        <div class="text-center mb-3">
+            <h5>ABOUT ME</h5>
             <p class="mb-1">QA Specialist</p>
             <p class="mb-1">Manual + Appium</p>
             <p class="mb-1">Android | iOS | Web</p>
             <p class="mb-1">Jira • Postman • Kibana</p>
             <p>UAT | SIT | Agile</p>
         </div>
-
+        
         <div class="divider"></div>
-        <h6 class="text-center">CONTACT</h6>
-        <div class="receipt-item">
-            <span>Name:</span>
-            <span>Muhamad Syifa Wahyudi</span>
+        
+        <h5 class="mb-3">CONTACT</h5>
+        <p><strong>Name:</strong> Muhamad Syifa Wahyudi</p>
+        
+        <div class="divider"></div>
+        
+        <h5 class="mb-3">EXPERIENCE</h5>
+        <div class="experience-item">
+            <span>BRI - Quality Assurance Engineer</span>
+            <span>2025 - Current</span>
         </div>
+        <div class="experience-item">
+            <span>BNI Quality Assurance</span>
+            <span>2024 - 2025</span>
+        </div>
+        <div class="experience-item">
+            <span>Alfadigital - Product Operation</span>
+            <span>2020 - 2021</span>
+        </div>
+        <button class="show-more-btn" onclick="toggleFreelance()">+ Freelance (Click to show more)</button>
+        <div class="hidden-content" id="freelanceContent">
+            <p>• Liquor Logo Design (Nov 2020, 1 month)</p>
+            <p>• Soap UMKM Logo (Mar 2022, 1 month)</p>
+        </div>
+        
         <div class="divider"></div>
-        <h6 class="text-center">EDUCATION</h6>
-        <div class="receipt-item">
-            <span>Universitas Bina Nusantara - Computer Science</span>
+        
+        <h5 class="mb-3">EDUCATION</h5>
+        <div class="education-item">
+            <span>Binus University - Computer Science</span>
             <span>2022</span>
         </div>
-        <div class="receipt-item">
+        <div class="education-item">
             <span>SMA Muhammadiyah 3 Tangerang</span>
             <span>2017</span>
         </div>
-        <h6 class="text-center">EXPERIENCE</h6>
-        <div class="receipt-item">
-            <span>BRI - Quality Assurance Engineer -</span>
-            <span>2025 - Current</span>
-        </div>
-        <div class="receipt-item">
-            <span>BNI - Quality Assurance -</span>
-            <span>2024 - 2025</span>
-        </div>
-        <div class="receipt-item">
-            <span>Alfadigital - Product Operation -</span>
-            <span>2020 - 2021</span>
-        </div>
-
+        
         <div class="divider"></div>
-
-        <h6 class="text-center">SKILLS</h6>
-        <div class="row text-center">
-            <div class="col-6">
-                <p class="mb-1">• Appium</p>
-                <p class="mb-1">• Postman</p>
+        
+        <h5 class="mb-3">SKILLS</h5>
+        <div class="skills-category">
+            <div class="skills-header" onclick="toggleSkills('testingTools')">
+                <span>▸ Testing Tools</span>
+                <span>▼</span>
             </div>
-            <div class="col-6">
-                <p class="mb-1">• Jira</p>
-                <p class="mb-1">• Selenium</p>
+            <div class="skills-content" id="testingTools">
+                <p>DBeaver | Kibana | Jira | Postman</p>
+                <p>Appium | Android Studio</p>
             </div>
         </div>
-
+        <div class="skills-category">
+            <div class="skills-header" onclick="toggleSkills('metodologi')">
+                <span>▸ Metodologi</span>
+                <span>▼</span>
+            </div>
+            <div class="skills-content" id="metodologi">
+                <p>UAT | SIT | Regression Testing</p>
+                <p>Smoke/Sanity Testing</p>
+            </div>
+        </div>
+        <div class="skills-category">
+            <div class="skills-header" onclick="toggleSkills('design')">
+                <span>▸ Design</span>
+                <span>▼</span>
+            </div>
+            <div class="skills-content" id="design">
+                <p>Figma | Adobe XD | Illustrator</p>
+            </div>
+        </div>
+        <div class="skills-category">
+            <div class="skills-header" onclick="toggleSkills('programming')">
+                <span>▸ Programming</span>
+                <span>▼</span>
+            </div>
+            <div class="skills-content" id="programming">
+                <p>Dart | HTML/CSS | Python</p>
+            </div>
+        </div>
+        
         <div class="divider"></div>
-
-        <div class="qr-code">
-            <p class="mb-1">Scan to connect</p>
-            <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=https://www.linkedin.com/in/muhamad-syifa-wahyudi/" alt="QR Code" class="img-fluid">
+        
+        <h5 class="mb-3">PROJECTS</h5>
+        <p><strong>BNI</strong> | Wondr & Back Office Web</p>
+        <p>Production Issue, Bonds, Tapcash, Ewallet, Transfer, QRIS, TimeDeposit</p>
+        <p>android ios Web Back Office (2024)</p>
+        <p class="mb-3"><em>Tools: Appium, Jira, Postman, DBeaver, Kibana, Mobax, Redish, SmartVista</em></p>
+        
+        <p><strong>Alfadigital</strong> | Alfagift & Alfamikro & Alfacart</p>
+        <p>Migration Payment, Monitoring dashboard, Redesign Alfamikro</p>
+        <p class="mb-3"><em>Tools: Jetbrains, Dashboard Alfadigital, Google studio</em></p>
+        
+        <p><strong>My Project</strong> | Ngobrolin </p>
+        <p>Playstore</p>
+        
+        <div class="divider"></div>
+        
+        <div class="qr-container">
+            <div class="qr-box">
+                <p>LinkedIn</p>
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=https://linkedin.com" alt="LinkedIn QR">
+            </div>
+            <div class="qr-box">
+                <p>Email Me</p>
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=mailto:example@gmail.com?subject=Let%27s%20Collaborate&body=Hi%20Yudd,%20I%20found%20your%20portfolio%20and..." alt="Email QR">
+            </div>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function showReceipt() {
+            document.getElementById('printPreview').style.display = 'none';
+            document.getElementById('receiptPortfolio').style.display = 'block';
+        }
+        
+        function togglePhoto() {
+            const photoContainer = document.getElementById('photoContainer');
+            const photoBtn = document.querySelector('.photo-btn');
+            
+            if (photoContainer.style.display === 'block') {
+                photoContainer.style.display = 'none';
+                photoBtn.textContent = '▼▼▼ Receipt Portfolio ▼▼▼';
+            } else {
+                photoContainer.style.display = 'block';
+                photoBtn.textContent = '▲▲▲ Receipt Portfolio ▲▲▲';
+            }
+        }
+        
+        function toggleFreelance() {
+            const content = document.getElementById('freelanceContent');
+            const btn = document.querySelector('.show-more-btn');
+            
+            if (content.style.display === 'block') {
+                content.style.display = 'none';
+                btn.textContent = '+ Freelance (Click to show more)';
+            } else {
+                content.style.display = 'block';
+                btn.textContent = '- Freelance (Click to hide)';
+            }
+        }
+        
+        function toggleSkills(id) {
+            const content = document.getElementById(id);
+            if (content.style.display === 'block') {
+                content.style.display = 'none';
+            } else {
+                content.style.display = 'block';
+            }
+        }
+    </script>
 </body>
 </html>
