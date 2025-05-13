@@ -1,330 +1,226 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Receipt Portfolio - Yudd</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Courier New', monospace;
-            background-color: #f5f5f5;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-            transition: all 0.5s ease;
-        }
-        
-        /* Print Preview Style */
-        .print-preview {
-            width: 300px;
-            height: 100px;
-            background-color: white;
-            border: 1px solid #ddd;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .print-preview:before {
-            content: "";
-            position: absolute;
-            top: 5px;
-            left: 10px;
-            right: 10px;
-            height: 2px;
-            background: repeating-linear-gradient(to right, #000, #000 2px, transparent 2px, transparent 4px);
-        }
-        
-        .print-preview:after {
-            content: "CLICK TO OPEN YUDD PORTFOLIO";
-            color: #666;
-            font-size: 0.9em;
-        }
-        
-        /* Full Receipt Style */
-        .receipt {
-            width: 100%;
-            max-width: 500px;
-            background-color: white;
-            padding: 25px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.1);
-            border-top: 5px solid #000;
-            position: relative;
-            display: none;
-        }
-        
-        .receipt:before {
-            content: "";
-            position: absolute;
-            left: 10px;
-            right: 10px;
-            bottom: -10px;
-            height: 20px;
-            background: rgba(0,0,0,0.05);
-            filter: blur(5px);
-            z-index: -1;
-        }
-        
-        .divider {
-            border-top: 1px dashed #000;
-            margin: 15px 0;
-        }
-        
-        .photo-btn {
-            background: none;
-            border: none;
-            font-family: 'Courier New', monospace;
-            font-weight: bold;
-            cursor: pointer;
-            text-align: center;
-            display: block;
-            width: 100%;
-            padding: 5px;
-            margin: 10px 0;
-        }
-        
-        .photo-container {
-            text-align: center;
-            margin: 15px 0;
-            display: none;
-        }
-        
-        .photo-container img {
-            max-width: 150px;
-            border-radius: 50%;
-            border: 2px solid #000;
-        }
-        
-        .show-more-btn {
-            background: none;
-            border: none;
-            font-family: 'Courier New', monospace;
-            color: #666;
-            cursor: pointer;
-            padding: 0;
-            font-size: 0.9em;
-        }
-        
-        .hidden-content {
-            display: none;
-        }
-        
-        .qr-container {
-            display: flex;
-            justify-content: space-around;
-            margin-top: 20px;
-        }
-        
-        .qr-box {
-            text-align: center;
-        }
-        
-        .qr-box img {
-            width: 100px;
-            height: 100px;
-        }
-        
-        .experience-item, .education-item {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
-        }
-        
-        .skills-category {
-            margin-bottom: 15px;
-        }
-        
-        .skills-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-        }
-        
-        .skills-content {
-            padding-left: 20px;
-            margin-top: 5px;
-        }
-    </style>
-</head>
-<body>
-    <div class="print-preview" id="printPreview" onclick="showReceipt()"></div>
-    
-    <div class="receipt" id="receiptPortfolio">
-        <div class="text-center mb-3">
-            <button class="photo-btn" onclick="togglePhoto()">▼▼▼ Receipt Portfolio ▼▼▼</button>
-            <div class="photo-container" id="photoContainer">
-                <p>#QA2025-001</p>
-            </div>
-        </div>
-        
-        <div class="divider"></div>
-        
-        <div class="text-center mb-3">
-            <h5>ABOUT ME</h5>
-            <p class="mb-1">QA Specialist</p>
-            <p class="mb-1">Manual + Appium</p>
-            <p class="mb-1">Android | iOS | Web</p>
-            <p class="mb-1">Jira • Postman • Kibana</p>
-            <p>UAT | SIT | Agile</p>
-        </div>
-        
-        <div class="divider"></div>
-        
-        <h5 class="mb-3">CONTACT</h5>
-        <p><strong>Name:</strong> Muhamad Syifa Wahyudi</p>
-        
-        <div class="divider"></div>
-        
-        <h5 class="mb-3">EXPERIENCE</h5>
-        <div class="experience-item">
-            <span>BRI - Quality Assurance Engineer</span>
-            <span>2025 - Current</span>
-        </div>
-        <div class="experience-item">
-            <span>BNI Quality Assurance</span>
-            <span>2024 - 2025</span>
-        </div>
-        <div class="experience-item">
-            <span>Alfadigital - Product Operation</span>
-            <span>2020 - 2021</span>
-        </div>
-        <button class="show-more-btn" onclick="toggleFreelance()">+ Freelance (Click to show more)</button>
-        <div class="hidden-content" id="freelanceContent">
-            <p>• Liquor Logo Design (Nov 2020, 1 month)</p>
-            <p>• Soap UMKM Logo (Mar 2022, 1 month)</p>
-        </div>
-        
-        <div class="divider"></div>
-        
-        <h5 class="mb-3">EDUCATION</h5>
-        <div class="education-item">
-            <span>Binus University - Computer Science</span>
-            <span>2022</span>
-        </div>
-        <div class="education-item">
-            <span>SMA Muhammadiyah 3 Tangerang</span>
-            <span>2017</span>
-        </div>
-        
-        <div class="divider"></div>
-        
-        <h5 class="mb-3">SKILLS</h5>
-        <div class="skills-category">
-            <div class="skills-header" onclick="toggleSkills('testingTools')">
-                <span>▸ Testing Tools</span>
-                <span>▼</span>
-            </div>
-            <div class="skills-content" id="testingTools">
-                <p>DBeaver | Kibana | Jira | Postman</p>
-                <p>Appium | Android Studio</p>
-            </div>
-        </div>
-        <div class="skills-category">
-            <div class="skills-header" onclick="toggleSkills('metodologi')">
-                <span>▸ Metodologi</span>
-                <span>▼</span>
-            </div>
-            <div class="skills-content" id="metodologi">
-                <p>UAT | SIT | Regression Testing</p>
-                <p>Smoke/Sanity Testing</p>
-            </div>
-        </div>
-        <div class="skills-category">
-            <div class="skills-header" onclick="toggleSkills('design')">
-                <span>▸ Design</span>
-                <span>▼</span>
-            </div>
-            <div class="skills-content" id="design">
-                <p>Figma | Adobe XD | Illustrator</p>
-            </div>
-        </div>
-        <div class="skills-category">
-            <div class="skills-header" onclick="toggleSkills('programming')">
-                <span>▸ Programming</span>
-                <span>▼</span>
-            </div>
-            <div class="skills-content" id="programming">
-                <p>Dart | HTML/CSS | Python</p>
-            </div>
-        </div>
-        
-        <div class="divider"></div>
-        
-        <h5 class="mb-3">PROJECTS</h5>
-        <p><strong>BNI</strong> | Wondr & Back Office Web</p>
-        <p>Production Issue, Bonds, Tapcash, Ewallet, Transfer, QRIS, TimeDeposit</p>
-        <p>android ios Web Back Office (2024)</p>
-        <p class="mb-3"><em>Tools: Appium, Jira, Postman, DBeaver, Kibana, Mobax, Redish, SmartVista</em></p>
-        
-        <p><strong>Alfadigital</strong> | Alfagift & Alfamikro & Alfacart</p>
-        <p>Migration Payment, Monitoring dashboard, Redesign Alfamikro</p>
-        <p class="mb-3"><em>Tools: Jetbrains, Dashboard Alfadigital, Google studio</em></p>
-        
-        <p><strong>My Project</strong> | Ngobrolin </p>
-        <p>Playstore</p>
-        
-        <div class="divider"></div>
-        
-        <div class="qr-container">
-            <div class="qr-box">
-                <p>LinkedIn</p>
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=https://linkedin.com" alt="LinkedIn QR">
-            </div>
-            <div class="qr-box">
-                <p>Email Me</p>
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=mailto:example@gmail.com?subject=Let%27s%20Collaborate&body=Hi%20Yudd,%20I%20found%20your%20portfolio%20and..." alt="Email QR">
-            </div>
-        </div>
-    </div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PORTFOLIO | Yudd</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="css/styles.css ">
+  </head>
+  <body>
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="name">MUHAMAD SYIFA WAHYUDI</div>
+      <div class="title-container">
+        <h1 class="hero-title">PORTFOLIO</h1>
+        <div class="my-job">QA Engineer</div>
+      </div>
+    </section>
 
+    <!-- About/Education/Experience Section -->
+    <section class="container my-5">
+      <div class="row">
+        <!-- About Me & Education -->
+        <div class="col-md-4 mb-5">
+          <h3 class="mb-4">ABOUT ME</h3>
+          <p>
+            I am a passionate QA Engineer with a keen eye for detail and a
+            commitment to delivering high-quality software.
+          </p>
+
+          <h3 class="mt-5 mb-4">EDUCATION</h3>
+          <p><strong>Binus University</strong><br />Computer Science (2022)</p>
+          <p><strong>SMA Muhammadiyah 3 Tangerang</strong><br />(2017)</p>
+        </div>
+
+        <!-- Photo -->
+        <div class="col-md-4 mb-5 text-center">
+          <img src="assets/my_photo.svg" alt="Yudd" class="img-fluid rounded" />
+        </div>
+
+        <!-- Experience -->
+        <div class="col-md-4 mb-5">
+          <h3 class="mb-4">EXPERIENCE</h3>
+          <p>
+            <strong>BRI</strong><br />Quality Assurance Engineer (2025-Current)
+          </p>
+          <p>
+            <strong>BNI</strong><br />Quality Assurance Engineer (2024-2025)
+          </p>
+          <p><strong>Alfadigital</strong><br />Product Operation (2020-2021)</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section class="container my-5">
+      <h2 class="mb-5">PROJECTS</h2>
+
+      <!-- Project Numbers -->
+      <div class="row text-center mb-5">
+        <div class="col-md-4 mb-4">
+          <div class="project-item" onclick="showProject('project1')">
+            <div class="project-number">01</div>
+            <div class="project-title">BNI</div>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4">
+          <div class="project-item" onclick="showProject('project2')">
+            <div class="project-number">02</div>
+            <div class="project-title">ALFA</div>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4">
+          <div class="project-item" onclick="showProject('project3')">
+            <div class="project-number">03</div>
+            <div class="project-title">MY PROJECT</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Project 01 Details -->
+      <div id="project1" class="project-details">
+        <div class="divider"></div>
+        <div class="row mb-5">
+          <div class="col-md-8">
+            <h3>BNI - Wondr & Back Office Web</h3>
+            <p>
+              Production Issue, Bonds, Tapcash, Ewallet, Transfer, QRIS,
+              TimeDeposit for android, iOS and Web Back Office (2024)
+            </p>
+            <p>
+              <em>Tools used:</em> Appium, Postman, JIRA, Confluence, Git,
+              Android Studio, Jira, Postman, DBeaver, Kibana, Mobax, Redish,
+              SmartVista
+            </p>
+          </div>
+          <div class="col-md-4 order-first order-md-last">
+            <div class="project-year">01</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Project 02 Details -->
+      <div id="project2" class="project-details">
+        <div class="row mb-5">
+          <div class="divider"></div>
+          <div class="col-md-8 order-2">
+            <h3>Alfadigital - Alfagift & Alfamikro & Alfacart</h3>
+            <p>
+              Migration Payment, Monitoring dashboard, Redesign Alfamikro
+              platform
+            </p>
+            <p>
+              <em>Tools used:</em> Jetbrains, Dashboard Alfadigital, Google
+              studio, Excel / Spreadsheet, DBeaver
+            </p>
+          </div>
+          <div class="col-md-4 order-1">
+            <div class="project-year">02</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Project 03 Details -->
+      <div id="project3" class="project-details">
+        <div class="row">
+          <div class="divider"></div>
+          <div class="col-md-8">
+            <h3>Personal Project - Ngobrolin App</h3>
+            <p>A Card QNA application published on Play Store</p>
+            <a
+              rel="noopener noreferrer"
+              href="https://play.google.com/store/apps/details?id=com.ngobrol_seru&hl=en-US"
+              target="_blank"
+              class="btn btn-outline-light"
+            >
+              <i class="fas fa-external-link-alt"></i> View on Play Store
+            </a>
+          </div>
+          <div class="col-md-4 order-first order-md-last">
+            <div class="project-year">03</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="container my-5">
+      <h2 class="mb-5">CONTACT ME</h2>
+
+      <div class="row justify-content-center">
+        <div class="col-md-10">
+          <div class="row">
+            <!-- LinkedIn -->
+            <div class="col-md-4 mb-5 text-center">
+              <a
+                rel="noopener noreferrer"
+                href="https://www.linkedin.com/in/muhamad-syifa-wahyudi/"
+                target="_blank"
+                class="d-block mb-3"
+              >
+                <i class="fab fa-linkedin fa-2x"></i>
+                <div class="mt-2">LinkedIn</div>
+              </a>
+            </div>
+
+            <!-- Email -->
+            <div class="col-md-4 mb-5 text-center">
+              <a href="mailto:muhammadsyifaw98@gmail.com" class="d-block mb-3">
+                <i class="fas fa-envelope fa-2x"></i>
+                <div class="mt-2">Email</div>
+              </a>
+            </div>
+
+            <!-- GitHub -->
+            <div class="col-md-4 mb-5 text-center">
+              <a
+                rel="noopener noreferrer"
+                href="https://github.com/SeyYudd"
+                target="_blank"
+                class="d-block mb-3"
+              >
+                <i class="fab fa-github fa-2x"></i>
+                <div class="mt-2">GitHub</div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        function showReceipt() {
-            document.getElementById('printPreview').style.display = 'none';
-            document.getElementById('receiptPortfolio').style.display = 'block';
+      function showProject(projectId) {
+        // Hide all project details first
+        document.querySelectorAll(".project-details").forEach((project) => {
+          project.classList.remove("active");
+        });
+
+        // Show the selected project
+        const project = document.getElementById(projectId);
+        if (project) {
+          project.classList.add("active");
+
+          // Scroll to the project details
         }
-        
-        function togglePhoto() {
-            const photoContainer = document.getElementById('photoContainer');
-            const photoBtn = document.querySelector('.photo-btn');
-            
-            if (photoContainer.style.display === 'block') {
-                photoContainer.style.display = 'none';
-                photoBtn.textContent = '▼▼▼ Receipt Portfolio ▼▼▼';
-            } else {
-                photoContainer.style.display = 'block';
-                photoBtn.textContent = '▲▲▲ Receipt Portfolio ▲▲▲';
-            }
-        }
-        
-        function toggleFreelance() {
-            const content = document.getElementById('freelanceContent');
-            const btn = document.querySelector('.show-more-btn');
-            
-            if (content.style.display === 'block') {
-                content.style.display = 'none';
-                btn.textContent = '+ Freelance (Click to show more)';
-            } else {
-                content.style.display = 'block';
-                btn.textContent = '- Freelance (Click to hide)';
-            }
-        }
-        
-        function toggleSkills(id) {
-            const content = document.getElementById(id);
-            if (content.style.display === 'block') {
-                content.style.display = 'none';
-            } else {
-                content.style.display = 'block';
-            }
-        }
+      }
+
+      // Show the first project by default
+      document.addEventListener("DOMContentLoaded", function () {
+        showProject("project1");
+      });
     </script>
-</body>
+  </body>
 </html>
